@@ -5,7 +5,7 @@ local log = {
         "ERROR"
     },
     first_entry = true,
-    default = "grofuri.log",
+    default = "bonk.log",
     __metatable = false
 }
 
