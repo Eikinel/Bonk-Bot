@@ -9,6 +9,6 @@ registerCommand({"chan"}, function(msg)
     membed:setDescription("Result of this command is ... " .. msg.client.owner.mentionString)
     membed:addField(
         "Message deleted with a lot of successful success !!")
-    msg.channel:send({embed = membed})
+    msg.channel:reply({embed = membed})
     msg:delete()
 end)
