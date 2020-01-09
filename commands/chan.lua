@@ -1,14 +1,12 @@
-local embed = require('tools/embed')
-local conf = require('conf')
-
 registerCommand({"chan"}, function(msg)
-    membed = embed:new()
-    
-    membed:setColor(conf.colorChart.default)
-    membed:setAuthor("State of command :", "", msg.client.user:getAvatarURL())
-    membed:setDescription("Result of this command is ... " .. msg.client.owner.mentionString)
-    membed:addField(
-        "Message deleted with a lot of successful success !!")
-    msg.channel:reply({embed = membed})
+    local category = msg.channel.category
+    local newChan = msg.guild:createTextChannel("channel_created")
+
+    if (newChan) then
+        msg.channel:send("Channel created")
+    else
+        msg.channel:send("Error while creating channel")
+    end
+    newChan:setCategory(category)
     msg:delete()
 end)
