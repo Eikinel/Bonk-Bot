@@ -8,11 +8,20 @@ local function create(msg, name)
 
     if not category then category = msg.guild:createCategory(conf.guild.categoryName) end
     channel:setCategory(category.id)
-    msg.channel:send("Nouveau channel créé ! Cliquez pour rejoindre <#" .. channel.id .. "> !")
+    msg.channel:send("Nouveau channel créé ! Cliquez pour rejoindre <#" .. channel.id .. ">.")
 end
 
-local function delete(msg, name)
-    msg.guild:getChannels()
+local function delete(msg, tag)
+    local category = msg.guild.categories:find(function(c) return c.name == conf.guild.categoryName end)
+    if not category then msg.channel:send("La catégorie " .. conf.guild.categoryName .. " n'existe pas.") return end
+    local channel = category.textChannels:find(function(c) return c.name == tag or c.id == tag end)
+    if not channel then msg.channel:send("Le channel " .. tag .. " n'existe pas.") return end
+
+    channel:delete()
+    msg.channel:send("Channel #" .. channel.name .. " supprimé.")
+
+    -- MAKES DISCORD CRASH !!
+    -- if #category.textChannels == 0 then category:delete() end
 end
 
 registerCommand({"chan", "channel"}, function(msg, args)
