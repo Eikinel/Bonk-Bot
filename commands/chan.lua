@@ -12,6 +12,9 @@ local function create(msg, name)
 end
 
 local function delete(msg, tag)
+    -- Replace potential spaces by dashes
+    tag = tag:gsub(" ", "-")
+
     local category = msg.guild.categories:find(function(c) return c.name == conf.guild.categoryName end)
     if not category then msg.channel:send("La catégorie " .. conf.guild.categoryName .. " n'existe pas.") return end
     local channel = category.textChannels:find(function(c) return c.name == tag or c.id == tag end)
