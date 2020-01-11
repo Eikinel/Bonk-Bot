@@ -5,7 +5,7 @@ require('tools/split')
 require('tools/table')
 
 local client = discordia.Client({cacheAllMembers = true})
-local trigger = "?!"
+local trigger = "'-'"
 local commands = {}
 
 client:once('ready', function()

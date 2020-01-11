@@ -11,7 +11,7 @@ registerCommand({"help", "man"}, function(msg)
     membed:addField(
         "**1 - Bot**",
 [[
-**?!help, ?!man** : affiche cette bulle d'aide
+**'-'help, '-'man** : affiche cette bulle d'aide
 ]])
 
     msg.author:send({embed = membed})
