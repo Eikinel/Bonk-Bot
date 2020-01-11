@@ -1,7 +1,44 @@
-local log = require('../tools/log')
+local log = require('tools/log')
+local conf = require('conf')
+require('tools/table')
+
+local function create(msg, name)
+    local channel = msg.guild:createTextChannel(name)
+    local category = msg.guild.categories:find(function(c) return c.name == conf.guild.categoryName end)
+
+    if not category then category = msg.guild:createCategory(conf.guild.categoryName) end
+    channel:setCategory(category.id)
+    msg.channel:send("Nouveau channel créé ! Cliquez pour rejoindre <#" .. channel.id .. ">.")
+end
+
+local function delete(msg, tag)
+    -- Replace potential spaces by dashes
+    tag = tag:gsub(" ", "-")
+
+    local category = msg.guild.categories:find(function(c) return c.name == conf.guild.categoryName end)
+    if not category then msg.channel:send("La catégorie " .. conf.guild.categoryName .. " n'existe pas.") return end
+    local channel = category.textChannels:find(function(c) return c.name == tag or c.id == tag end)
+    if not channel then msg.channel:send("Le channel " .. tag .. " n'existe pas.") return end
+
+    channel:delete()
+    msg.channel:send("Channel #" .. channel.name .. " supprimé.")
+
+    -- MAKES DISCORD CRASH !!
+    -- if #category.textChannels == 0 then category:delete() end
+end
 
 registerCommand({"chan", "channel"}, function(msg, args)
-    local category = msg.channel.category
+    local action, name = unpack(args)
+    local fn = {
+        create = create,
+        delete = delete
+    }
+
+    if #args > 1 and fn[action] then
+        fn[action](msg, name)
+    end
+
+    --[[local category = msg.channel.category
     local guild = msg.guild
     
     if (args[1] == "create" and args[2]) then
@@ -14,5 +51,5 @@ registerCommand({"chan", "channel"}, function(msg, args)
         chan:delete()
     end
     --remove next line after debug
-    msg:delete()
+    msg:delete()]]--
 end)
